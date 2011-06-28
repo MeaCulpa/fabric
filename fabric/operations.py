@@ -12,6 +12,8 @@ import subprocess
 import sys
 import time
 from glob import glob
+from textwrap import dedent
+from uuid import uuid4
 from traceback import format_exc
 
 from contextlib import closing
@@ -943,6 +945,31 @@ def run(command, shell=True, pty=True, combine_stderr=None):
     """
     return _run_command(command, shell, pty, combine_stderr)
 
+@needs_host
+def execute(
+    script, name=None, verbose=True, shell=True, pty=True, combine_stderr=True
+    ):
+    """Run arbitrary scripts on a remote host.
+    """
+    script = dedent(script).strip()
+    if verbose:
+        prefix = "[%s]" % env.host_string
+        if env.colors:
+            prefix = env.color_settings['host_prefix'](prefix)
+        print("%s run: %s" % (prefix, name or script))
+    name = name or DEFAULT_SCRIPT_NAME
+    with hide('running', 'stdout', 'stderr'):
+        run('cat > ' + name + ' << FABEND\n' + script + '\nFABEND\n')
+        run('chmod +x ' + name)
+        try:
+            if verbose > 1:
+                with show('stdout', 'stderr'):
+                    output = run('./' + name, shell, pty, combine_stderr)
+            else:
+                output = run('./' + name, shell, pty, combine_stderr)
+        finally:
+            run('rm ' + name)
+    return output
 
 @needs_host
 def sudo(command, shell=True, pty=True, combine_stderr=None, user=None):
