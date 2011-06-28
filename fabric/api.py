@@ -9,6 +9,6 @@ well when you're using setup.py to install e.g. paramiko!
 from fabric.context_managers import cd, hide, settings, show, path, prefix, lcd
 from fabric.decorators import hosts, roles, runs_once, with_settings, task
 from fabric.operations import (require, prompt, put, get, run, sudo, local,
-    reboot, open_shell)
+    reboot, open_shell, execute)
 from fabric.state import env, output
 from fabric.utils import abort, warn, puts, fastprint
