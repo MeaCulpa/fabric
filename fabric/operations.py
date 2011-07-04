@@ -18,7 +18,7 @@ from traceback import format_exc
 
 from contextlib import closing
 
-from fabric.context_managers import settings, char_buffered
+from fabric.context_managers import settings, char_buffered, hide, show
 from fabric.io import output_loop, input_loop
 from fabric.network import needs_host
 from fabric.sftp import SFTP
