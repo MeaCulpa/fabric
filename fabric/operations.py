@@ -954,8 +954,6 @@ def execute(
     script = dedent(script).strip()
     if verbose:
         prefix = "[%s]" % env.host_string
-        if env.colors:
-            prefix = env.color_settings['host_prefix'](prefix)
         print("%s run: %s" % (prefix, name or script))
     name = name or DEFAULT_SCRIPT_NAME
     with hide('running', 'stdout', 'stderr'):
